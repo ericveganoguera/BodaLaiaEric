@@ -1,0 +1,86 @@
+:root{
+  --max-width:1100px;
+  --accent:#0f172a;
+  --muted:#666;
+  --gap:24px;
+  font-family: Inter, system-ui, Arial, sans-serif;
+}
+
+*{box-sizing:border-box}
+body{margin:0;color:#111;line-height:1.45}
+
+.site-header{position:relative}
+
+/* NAV */
+.nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px calc(12px + 2vw);
+  position:fixed;
+  width:100%;
+  top:0;
+  left:0;
+  z-index:20;
+  background:rgba(255,255,255,0.65);
+  backdrop-filter:blur(6px);
+}
+.logo{font-weight:700;text-decoration:none;color:var(--accent)}
+.nav-links{list-style:none;margin:0;padding:0;display:flex;gap:18px}
+.nav-links a{text-decoration:none;color:var(--accent)}
+
+/* HERO */
+.hero{
+  height:78vh;
+  min-height:420px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background-image:linear-gradient(rgba(10,10,10,0.35),rgba(10,10,10,0.35)), url("../assets/hero.jpg");
+  background-size:cover;
+  background-position:center;
+  padding-top:72px; /* espacio por nav fijo */
+}
+.hero-inner{
+  text-align:center;
+  color:#fff;
+  max-width:900px;
+  padding:48px;
+}
+.hero h1{font-size:clamp(28px,5vw,56px);margin:0 0 12px}
+.hero p{margin:0 0 18px;color:rgba(255,255,255,0.9)}
+.btn{
+  display:inline-block;
+  padding:12px 20px;
+  border-radius:8px;
+  text-decoration:none;
+  background:#fff;
+  color:var(--accent);
+  font-weight:600;
+}
+
+/* CONTENT */
+main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
+
+.grid-section h2,
+.content-section h2,
+.contact-section h2{margin:0 0 18px;font-size:1.4rem}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:var(--gap)}
+.card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 6px 20px rgba(12,20,30,0.06)}
+
+/* CONTACT */
+.contact-form{display:grid;gap:12px;max-width:560px}
+.contact-form input,
+.contact-form textarea{padding:10px;border:1px solid #ddd;border-radius:8px;font-size:1rem}
+.contact-form button{padding:12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+
+/* FOOTER */
+.site-footer{padding:28px 20px;text-align:center;color:var(--muted);font-size:0.9rem}
+
+/* RESPONSIVE tweaks */
+@media (max-width:720px){
+  .nav{padding:12px}
+  .nav-links{display:none}
+  .hero{height:64vh}
+}
