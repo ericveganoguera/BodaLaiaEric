@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Confirmar assistencia | E&L</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="pagina-confirmacio">
+  <header>
+    <nav class="nav">
+      <ul class="nav-links">
+        <li><a href="index.html#lanostrehistoria">La nostra historia</a></li>
+        <li><a href="index.html#viatgeiestada">Viatge i estada</a></li>
+      </ul>
+      <a href="index.html" class="nav_title"><h3>E&L 25.09.26</h3></a>
+      <a class="confirmar_assistencia" href="index.html">Tornar</a>
+    </nav>
+  </header>
+
+  <main class="confirmacio-main">
+    <section class="confirmacio">
+      <div class="confirmacio-intro">
+        <h1>Confirmacio d'assistencia</h1>
+        <p>Hi ha dies que es fan grans per les persones que els comparteixen. Ens encantara saber si caminareu amb nosaltres en aquest trosset de festa, taula i amor.</p>
+      </div>
+
+      <div class="confirmacio-layout">
+        <figure class="confirmacio-foto">
+          <img src="assets/banquet.jpg" alt="Eric i Laia">
+        </figure>
+
+        <form class="confirmacio-form" action="https://formsubmit.co/ericilaia.10@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Nova confirmacio d'assistencia - E&L">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_next" value="https://www.ericilaia.es/gracies.html">
+
+          <div class="form-row">
+            <label for="nom">Nom i cognoms</label>
+            <input id="nom" name="Nom i cognoms" type="text" required>
+          </div>
+
+          <div class="form-row">
+            <label for="email">Correu electronic</label>
+            <input id="email" name="Correu electronic" type="email" required>
+          </div>
+
+          <fieldset class="form-row">
+            <legend>Podreu assistir?</legend>
+            <label class="radio-option">
+              <input type="radio" name="Assistencia" value="Si, assistirem" required>
+              Si, assistirem
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="Assistencia" value="No podrem assistir">
+              No podrem assistir
+            </label>
+          </fieldset>
+
+          <div class="form-row">
+            <label for="persones">Nombre de persones</label>
+            <input id="persones" name="Nombre de persones" type="number" min="1" max="10" value="1" required>
+          </div>
+
+          <div class="form-row">
+            <label for="apat">Apat del banquet</label>
+            <select id="apat" name="Apat del banquet" required>
+              <option value="">Selecciona una opcio</option>
+              <option value="Menu general">Menu general</option>
+              <option value="Menu vegetaria">Menu vegetaria</option>
+              <option value="Menu infantil">Menu infantil</option>
+              <option value="Altres necessitats">Altres necessitats</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="alergies">Alergies o intolerancies</label>
+            <textarea id="alergies" name="Alergies o intolerancies" rows="4" placeholder="Expliqueu-nos qualsevol detall important"></textarea>
+          </div>
+
+          <button class="form-submit" type="submit">Enviar confirmacio</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
