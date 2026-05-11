@@ -3,32 +3,43 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Demo - Página</title>
+  <title>L&E 25/11/26</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <header class="site-header">
     <nav class="nav">
-      <a class="logo" href="#">MiMarca</a>
-      <ul class="nav-links">
-        <li><a href="#servicios">Servicios</a></li>
-        <li><a href="#proyectos">Proyectos</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-      </ul>
+        <ul class="nav-links">
+          <li><a href="#lanostrehistoria">La nostre història</a></li>
+          <li><a href="#viatgeiestada">Viatge i estada</a></li>
+        </ul>
+        <a href="/" class="nav_title"><h3>L&E 25.11.26</h3></a>
+      <a class="confirmar_assistencia" href="#confirmarassistencia">Confirmar assistencia</a>
     </nav>
 
-    <section class="hero">
-      <div class="hero-inner">
-        <h1>Título principal impactante</h1>
-        <p>Subtítulo breve que explica la propuesta.</p>
-        <a class="btn" href="#contacto">Contacto</a>
+    <section class="imatgeprincipal">
+      <div class="imatgeprincipal-banner">
+        <p>¡ENS CASEM!</p>
+        <h1>Èric & Laia</h1>
+        <p>25 . 09 . 2026</p>
       </div>
     </section>
   </header>
 
   <main>
-    <section id="servicios" class="grid-section">
-      <h2>Servicios</h2>
+    <section id="ceremonia">
+      <div class="cerimonia">
+        <div class="cerimonia">
+          <h2>Cerimonia</h2>
+          <h4>17:00</h4>
+          <p>Masia Can Macià - Odena</p>
+          <a href="https://maps.app.goo.gl/EMqzW7Tg6xdvP4PMA">Mapa</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="lanostrehistoria" class="grid-section">
+      <h2>La nostre història</h2>
       <div class="grid">
         <article class="card">
           <h3>Servicio 1</h3>
@@ -45,24 +56,30 @@
       </div>
     </section>
 
-    <section id="proyectos" class="content-section">
+    <section id="viatgeiestada" class="content-section">
       <h2>Proyectos</h2>
       <p>Texto y ejemplos visuales.</p>
-    </section>
-
-    <section id="contacto" class="contact-section">
-      <h2>Contacto</h2>
-      <form class="contact-form">
-        <input type="text" placeholder="Nombre" required>
-        <input type="email" placeholder="Email" required>
-        <textarea placeholder="Mensaje" required></textarea>
-        <button type="submit">Enviar</button>
-      </form>
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>© 2025 MiMarca. Todos los derechos reservados.</p>
+    <p>© 2026 Eric&Laia. Todos los derechos reservados.</p>
   </footer>
+  <script>
+    const root = document.documentElement;
+    const maxScroll = 180;
+    const maxOpacity = 0.75;
+    const maxBlur = 6;
+
+    function updateNavOpacity() {
+      const progress = Math.min(window.scrollY / maxScroll, 1);
+
+      root.style.setProperty("--nav-bg-opacity", (progress * maxOpacity).toFixed(2));
+      root.style.setProperty("--nav-blur", `${(progress * maxBlur).toFixed(1)}px`);
+    }
+
+    updateNavOpacity();
+    window.addEventListener("scroll", updateNavOpacity, { passive: true });
+  </script>
 </body>
 </html>
