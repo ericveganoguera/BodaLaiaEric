@@ -55,7 +55,8 @@ body{margin:0;color:#111;line-height:1.45}
   display:flex;
   align-items:center;
   justify-content:center;
-  background-image:linear-gradient(rgba(10,10,10,0.35),rgba(10,10,10,0.35)), url("../assets/fonsprincipal.jpeg");
+  /* background-image:linear-gradient(rgba(10,10,10,0.35),rgba(10,10,10,0.35)), url("../assets/fonsprincipal.jpeg"); */
+  background-image:linear-gradient(rgba(10,10,10,0.35),rgba(10,10,10,0.35)), url("../assets/parella-1.jpg");
   background-size:cover;
   background-position:center;
   padding-top:72px; /* espacio por nav fijo */
@@ -559,8 +560,9 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
 .section-heading{
   display:flex;
   justify-content:space-between;
-  align-items:end;
-  gap:32px;
+  align-items:start;
+  flex-direction: column;
+  gap:12px;
   margin-bottom:28px;
 }
 
@@ -621,6 +623,7 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
 
 .transport-list{
   display:grid;
+  justify-content: start;
   gap:16px;
 }
 
@@ -849,12 +852,17 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   .estada-foto-band div{border-radius:0 0 8px 8px;padding:24px}
   .fonts{padding:48px 20px 64px}
 }
+/* @media (max-width:565px){
+   .nav {
+    foins
+  }
+} */
 
-@media (max-width:380px){
+@media (max-width:565px){
   .nav_title h3{font-size:1.22rem}
   .nav-links{gap:6px}
-  .nav-links a{font-size:0.78rem;padding:8px 6px}
-  .confirmar_assistencia{font-size:0.86rem}
+  .nav-links a{font-size:0.65rem;padding:8px 6px}
+  .confirmar_assistencia{font-size:0.65rem}
   .pagina-hero,
   .imatgeprincipal{padding-top:172px}
   .cerimonia-foto{max-width:76vw}
