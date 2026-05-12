@@ -826,8 +826,8 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   .timeline,
   .info-grid,
   .split-info,
-  .historia-galeria,
   .estada-foto-band{grid-template-columns:1fr}
+  .historia-galeria{display: none}
   .historia-layout,
   .info-section{padding:56px 16px 0}
   .historia-layout{gap:34px}
@@ -841,7 +841,7 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   .historia-galeria img{min-height:250px;aspect-ratio:4 / 3}
   .timeline{padding:0 16px 56px}
   .timeline article{padding:24px}
-  .frase-final{margin-bottom:56px;padding:0 16px}
+  .frase-final{margin-top:56px;padding:0 16px}
   .section-heading{display:block}
   .info-card{min-height:auto}
   .estada-foto-band{margin-top:56px;padding:0 16px}
