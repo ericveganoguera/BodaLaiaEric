@@ -64,6 +64,23 @@
           </div>
 
           <div class="form-row">
+            <label for="bus">Si hi hagues un bus que et portes i tornes desde Manresa, el faries servir?</label>
+            <label class="radio-option">
+              <input type="radio" name="Bus" value="Si" required>
+              Si
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="Bus" value="No ">
+              No
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label for="alergies">Alergies o intolerancies</label>
+            <textarea id="alergies" name="Alergies o intolerancies" rows="4" placeholder="Expliqueu-nos qualsevol detall important"></textarea>
+          </div>
+
+          <div class="form-row">
             <label for="apat">Apat del banquet</label>
             <select id="apat" name="Apat del banquet" required>
               <option value="">Selecciona una opcio</option>
@@ -75,8 +92,8 @@
           </div>
 
           <div class="form-row">
-            <label for="alergies">Alergies o intolerancies</label>
-            <textarea id="alergies" name="Alergies o intolerancies" rows="4" placeholder="Expliqueu-nos qualsevol detall important"></textarea>
+            <label for="canco">Cançó que no pot faltar</label>
+            <textarea id="canco" name="Cançó" rows="4" placeholder="La teva cançó preferida"></textarea>
           </div>
 
           <button class="form-submit" type="submit">Enviar confirmacio</button>
