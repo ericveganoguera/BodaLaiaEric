@@ -73,12 +73,15 @@ function toggleAssistencia() {
 
     campsAssistencia.style.display = noAssistiran ? "none" : "block";
 
-    // activar/desactivar required de los campos principales
-    campsAssistencia
-        .querySelectorAll("input, select, textarea")
-        .forEach(el => {
-            el.required = !noAssistiran;
-        });
+    // SOLO desactivar required cuando NO asisten
+    campsAssistencia.querySelectorAll("[required]").forEach(el => {
+        el.dataset.wasRequired = "1";
+        if (noAssistiran) {
+            el.removeAttribute("required");
+        } else {
+            el.setAttribute("required", "true");
+        }
+    });
 
     crearCampos(parseInt(personesInput.value || 1));
 }
