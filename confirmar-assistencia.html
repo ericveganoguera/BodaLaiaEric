@@ -31,19 +31,40 @@
         </figure>
 
         <form class="confirmacio-form" action="https://formsubmit.co/ericilaia.10@gmail.com" method="POST">
-          <input type="hidden" name="_subject" value="Nova confirmacio d'assistencia - E&L">
+          <input type="hidden" name="_subject" value="Nova confirmacio d'assistencia E&L - {nomicognoms}">
           <input type="hidden" name="_template" value="table">
-          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_captcha" value="true">
           <input type="hidden" name="_next" value="https://www.ericilaia.es/gracies.html">
+          <input type="hidden" name="_replyto" value="{CorreuElectronic}">
+          <input type="text" name="_honey" style="display:none">
+          <input type="hidden" name="_autoresponse" value="
+          <h2>Confirmació rebuda 🎉</h2>
+
+          <p>Gràcies <b>{nomicognoms}</b> per confirmar la teva assistència al casament.</p>
+
+          <h3>Resum de la teva resposta:</h3>
+
+          <ul>
+            <li><b>Email:</b> {CorreuElectronic}</li>
+            <li><b>Assistència:</b> {Assistencia}</li>
+            <li><b>Persones:</b> {NombrePersones}</li>
+            <li><b>Bus:</b> {Bus}</li>
+            <li><b>Menú:</b> {ApatBanquet}</li>
+            <li><b>Alergies / intoleràncies:</b> {AlergiesIntolerancies}</li>
+            <li><b>Cançó:</b> {Cancion}</li>
+          </ul>
+
+          <p>Ens veiem aviat ❤️</p>
+          ">
 
           <div class="form-row">
             <label for="nom">Nom i cognoms</label>
-            <input id="nom" name="Nom i cognoms" type="text" required>
+            <input id="nom" name="nomicognoms" type="text" required>
           </div>
 
           <div class="form-row">
             <label for="email">Correu electronic</label>
-            <input id="email" name="Correu electronic" type="email" required>
+            <input id="email" name="CorreuElectronic" type="email" required>
           </div>
 
           <fieldset class="form-row">
@@ -60,8 +81,10 @@
 
           <div class="form-row">
             <label for="persones">Nombre de persones</label>
-            <input id="persones" name="Nombre de persones" type="number" min="1" max="10" value="1" required>
+            <input id="persones" name="NombrePersones" type="number" min="1" max="10" value="1" required>
           </div>
+
+          <div id="acompanyants"></div>
 
           <div class="form-row">
             <label for="bus">Si hi hagues un bus que et portes i tornes desde Manresa, el faries servir?</label>
@@ -77,7 +100,7 @@
 
           <div class="form-row">
             <label for="apat">Apat del banquet</label>
-            <select id="apat" name="Apat del banquet" required>
+            <select id="apat" name="ApatBanquet" required>
               <option value="">Selecciona una opcio</option>
               <option value="Menu general">Menu general</option>
               <option value="Menu vegetaria">Menu vegetaria</option>
@@ -88,12 +111,12 @@
 
           <div class="form-row">
             <label for="alergies">Alergies o intolerancies</label>
-            <textarea id="alergies" name="Alergies o intolerancies" rows="4" placeholder="Expliqueu-nos qualsevol detall important"></textarea>
+            <textarea id="alergies" name="AlergiesIntolerancies" rows="4" placeholder="Expliqueu-nos qualsevol detall important"></textarea>
           </div>
 
           <div class="form-row">
             <label for="canco">Cançó que no pot faltar</label>
-            <textarea id="canco" name="Cançó" rows="4" placeholder="La teva cançó preferida"></textarea>
+            <textarea id="canco" name="Cancion" rows="4" placeholder="La teva cançó preferida"></textarea>
           </div>
 
           <button class="form-submit" type="submit">Enviar confirmacio</button>
@@ -101,5 +124,57 @@
       </div>
     </section>
   </main>
+
+  <script>
+  const personesInput = document.getElementById("persones");
+  const container = document.getElementById("acompanyants");
+
+  function crearCampos(num) {
+    container.innerHTML = "";
+
+    for (let i = 2; i <= num; i++) {
+      const div = document.createElement("div");
+      div.className = "acompanyant";
+
+      div.innerHTML = `
+        <hr>
+
+        <h4>Persona ${i}</h4>
+
+        <div class="form-row">
+          <label>Nom i cognoms</label>
+          <input type="text" name="nomicognoms_${i}" required>
+        </div>
+
+        <div class="form-row">
+          <label>Apat del banquet</label>
+          <select name="ApatBanquet_${i}" required>
+            <option value="">Selecciona una opcio</option>
+            <option value="Menu general">Menu general</option>
+            <option value="Menu vegetaria">Menu vegetaria</option>
+            <option value="Menu infantil">Menu infantil</option>
+            <option value="Altres necessitats">Altres necessitats</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <label>Alergies o intolerancies</label>
+          <textarea name="Alergies_${i}" rows="3"></textarea>
+        </div>
+      `;
+
+      container.appendChild(div);
+    }
+  }
+
+  personesInput.addEventListener("input", () => {
+    let num = parseInt(personesInput.value || 1);
+
+    if (num < 1) num = 1;
+    if (num > 8) num = 8;
+
+    crearCampos(num);
+  });
+</script>
 </body>
 </html>
