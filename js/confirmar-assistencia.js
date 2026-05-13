@@ -2,7 +2,7 @@ const personesInput = document.getElementById("persones");
 const container = document.getElementById("acompanyants");
 const radioSi = document.getElementById("assistencia-si");
 const radioNo = document.getElementById("assistencia-no");
-const campsAssistencia = document.querySelector(".campsAssistencia");
+const campsAssistencia = document.querySelector(".camps-assistencia");
 
 function crearCampos(num) {
   container.innerHTML = "";
@@ -16,10 +16,9 @@ function crearCampos(num) {
     div.className = "acompanyant";
 
     let html = `
-  <hr>
   <h4>Persona ${i}</h4>
 
-  <div class="form-row" style="margin-bottom: 20px;">
+  <div class="form-row" >
     <label>Nom i cognoms</label>
     <input type="text" name="NomiCognoms_${i}" required>
   </div>
@@ -27,7 +26,7 @@ function crearCampos(num) {
 
     if (!noAssistiran) {
       html += `
-    <div class="form-row" style="margin-bottom: 20px;">
+    <div class="form-row">
       <label>Apat del banquet</label>
       <select name="ApatBanquet_${i}" required>
         <option value="">Selecciona una opcio</option>
@@ -38,7 +37,7 @@ function crearCampos(num) {
       </select>
     </div>
 
-    <div class="form-row" style="margin-bottom: 20px;"> 
+    <div class="form-row"> 
       <label>Alergies o intolerancies</label>
       <textarea name="Alergies_${i}" rows="2"></textarea>
     </div>

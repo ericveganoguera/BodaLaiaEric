@@ -253,6 +253,11 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   background:#fff;
 }
 
+.camps-assistencia{
+  display: grid;
+  gap: 22px;
+}
+
 .form-row{
   display:grid;
   gap:8px;
