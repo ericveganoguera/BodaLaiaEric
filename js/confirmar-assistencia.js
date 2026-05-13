@@ -5,77 +5,82 @@ const radioNo = document.getElementById("assistencia-no");
 const campsAssistencia = document.querySelector(".camps-assistencia");
 
 function crearCampos(num) {
-  container.innerHTML = "";
+    container.innerHTML = "";
 
-  const noAssistiran = radioNo.checked;
+    const noAssistiran = radioNo.checked;
 
-  num = Math.max(1, Math.min(8, num || 1));
+    num = Math.max(1, Math.min(8, num || 1));
 
-  for (let i = 2; i <= num; i++) {
-    const div = document.createElement("div");
-    div.className = "acompanyant";
+    for (let i = 2; i <= num; i++) {
+        const div = document.createElement("div");
+        div.className = "acompanyant";
 
-    let html = `
-  <h4>Persona ${i}</h4>
+        let html = `
+        <h4>Persona ${i}</h4>
 
-  <div class="form-row" >
-    <label>Nom i cognoms</label>
-    <input type="text" name="NomiCognoms_${i}" required>
-  </div>
-`;
+        <div class="form-row" >
+            <label>Nom i cognoms</label>
+            <input type="text" name="NomiCognoms_${i}" required>
+        </div>
+        `;
 
-    if (!noAssistiran) {
-      html += `
-    <div class="form-row">
-      <label>Apat del banquet</label>
-      <select name="ApatBanquet_${i}" required>
-        <option value="">Selecciona una opcio</option>
-        <option value="Menu general">Menu general</option>
-        <option value="Menu vegetaria">Menu vegetaria</option>
-        <option value="Menu infantil">Menu infantil</option>
-        <option value="Altres necessitats">Altres necessitats</option>
-      </select>
-    </div>
+        if (!noAssistiran) {
+            html += `
+            <div class="form-row">
+            <label>Apat del banquet</label>
+            <select name="ApatBanquet_${i}" required>
+                <option value="">Selecciona una opcio</option>
+                <option value="Menu general">Menu general</option>
+                <option value="Menu vegetaria">Menu vegetaria</option>
+                <option value="Menu infantil">Menu infantil</option>
+                <option value="Altres necessitats">Altres necessitats</option>
+            </select>
+            </div>
 
-    <div class="form-row"> 
-      <label>Alergies o intolerancies</label>
-      <textarea name="Alergies_${i}" rows="2"></textarea>
-    </div>
+            <div class="form-row"> 
+            <label>Alergies o intolerancies</label>
+            <textarea name="Alergies_${i}" rows="2"></textarea>
+            </div>
 
-    <div class="form-row" style="margin-bottom: 30px;">
-      <label>Cançó que no pot faltar</label>
-      <textarea name="Cancion_${i}" rows="1"></textarea>
-    </div>
-  `;
+            <div class="form-row" style="margin-bottom: 30px;">
+            <label>Cançó que no pot faltar</label>
+            <textarea name="Cancion_${i}" rows="1"></textarea>
+            </div>
+        `;
+        }
+
+        div.innerHTML = html;
+        container.appendChild(div);
     }
-
-    div.innerHTML = html;
-    container.appendChild(div);
-  }
 }
 
 personesInput.addEventListener("input", () => {
-  let num = parseInt(personesInput.value || 1);
+    let num = parseInt(personesInput.value || 1);
 
-  if (num < 1) num = 1;
-  if (num > 8) num = 8;
+    if (num < 1) num = 1;
+    if (num > 8) num = 8;
 
-  crearCampos(num);
+    crearCampos(num);
 });
 
 document.querySelector("form").addEventListener("submit", function () {
-  const name = document.getElementById("nom").value;
-  document.getElementById("subject").value = "Nova confirmacio d'assistencia E&L - " + name;
+    const name = document.getElementById("nom").value;
+    document.getElementById("subject").value = "Nova confirmacio d'assistencia E&L - " + name;
 });
 
 function toggleAssistencia() {
-  if (radioNo.checked) {
-    campsAssistencia.style.display = "none";
-  } else {
-    campsAssistencia.style.display = "block";
-  }
+    const noAssistiran = radioNo.checked;
 
-  crearCampos(parseInt(personesInput.value || 1));
+    campsAssistencia.style.display = noAssistiran ? "none" : "block";
+
+    // activar/desactivar required de los campos principales
+    campsAssistencia
+        .querySelectorAll("input, select, textarea")
+        .forEach(el => {
+            el.required = !noAssistiran;
+        });
+
+    crearCampos(parseInt(personesInput.value || 1));
 }
 
 radioSi.addEventListener("change", toggleAssistencia);
