@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 
+
 <body class="pagina-confirmacio">
   <header>
     <nav class="nav">
@@ -55,13 +56,13 @@
           </div>
 
           <fieldset class="form-row">
-            <legend>Podreu assistir?</legend>
+            <legend style="margin-bottom: 10px;">Podreu assistir?</legend>
             <label class="radio-option">
-              <input type="radio" name="Assistencia" value="Si, assistirem" required>
+              <input type="radio" id="assistencia-si" name="Assistencia" value="Si, assistirem" required>
               Si, assistirem
             </label>
             <label class="radio-option">
-              <input type="radio" name="Assistencia" value="No podrem assistir">
+              <input type="radio" id="assistencia-no" name="Assistencia" value="No podrem assistir">
               No podrem assistir
             </label>
           </fieldset>
@@ -70,43 +71,44 @@
             <label for="persones">Nombre de persones</label>
             <input id="persones" name="NombrePersones" type="number" min="1" max="8" value="1" required>
           </div>
+          <div class="campsAssistencia">
+            <div class="form-row">
+              <label for="bus">Si hi hagues un bus que et portes i tornes desde Manresa, el faries servir?</label>
+              <label class="radio-option">
+                <input type="radio" name="Bus" value="Si" required>
+                Si
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="Bus" value="No ">
+                No
+              </label>
+            </div>
 
-          <div class="form-row">
-            <label for="bus">Si hi hagues un bus que et portes i tornes desde Manresa, el faries servir?</label>
-            <label class="radio-option">
-              <input type="radio" name="Bus" value="Si" required>
-              Si
-            </label>
-            <label class="radio-option">
-              <input type="radio" name="Bus" value="No ">
-              No
-            </label>
+            <div class="form-row">
+              <label for="apat">Apat del banquet</label>
+              <select id="apat" name="ApatBanquet" required>
+                <option value="">Selecciona una opcio</option>
+                <option value="Menu general">Menu general</option>
+                <option value="Menu vegetaria">Menu vegetaria</option>
+                <option value="Menu infantil">Menu infantil</option>
+                <option value="Altres necessitats">Altres necessitats</option>
+              </select>
+            </div>
+
+            <div class="form-row">
+              <label for="alergies">Alergies o intolerancies</label>
+              <textarea id="alergies" name="AlergiesIntolerancies" rows="2"
+                placeholder="Expliqueu-nos qualsevol detall important"></textarea>
+            </div>
+
+            <div class="form-row">
+              <label for="canco">Cançó que no pot faltar</label>
+              <textarea id="canco" name="Cancion" rows="1" placeholder="La teva cançó preferida"
+                style="margin-bottom: 30px;"></textarea>
+            </div>
+
           </div>
-
-          <div class="form-row">
-            <label for="apat">Apat del banquet</label>
-            <select id="apat" name="ApatBanquet" required>
-              <option value="">Selecciona una opcio</option>
-              <option value="Menu general">Menu general</option>
-              <option value="Menu vegetaria">Menu vegetaria</option>
-              <option value="Menu infantil">Menu infantil</option>
-              <option value="Altres necessitats">Altres necessitats</option>
-            </select>
-          </div>
-
-          <div class="form-row">
-            <label for="alergies">Alergies o intolerancies</label>
-            <textarea id="alergies" name="AlergiesIntolerancies" rows="4"
-              placeholder="Expliqueu-nos qualsevol detall important"></textarea>
-          </div>
-
           <div id="acompanyants"></div>
-
-          <div class="form-row">
-            <label for="canco">Cançó que no pot faltar</label>
-            <textarea id="canco" name="Cancion" rows="4" placeholder="La teva cançó preferida"></textarea>
-          </div>
-
           <button class="form-submit" type="submit">Enviar confirmacio</button>
         </form>
       </div>
@@ -116,25 +118,34 @@
   <script>
     const personesInput = document.getElementById("persones");
     const container = document.getElementById("acompanyants");
+    const radioSi = document.getElementById("assistencia-si");
+    const radioNo = document.getElementById("assistencia-no");
+    const campsAssistencia = document.querySelector(".campsAssistencia");
 
     function crearCampos(num) {
       container.innerHTML = "";
+
+      const noAssistiran = radioNo.checked;
+
+      num = Math.max(1, Math.min(8, num || 1));
 
       for (let i = 2; i <= num; i++) {
         const div = document.createElement("div");
         div.className = "acompanyant";
 
-        div.innerHTML = `
-        <hr>
+        let html = `
+      <hr>
+      <h4>Persona ${i}</h4>
 
-        <h4>Persona ${i}</h4>
+      <div class="form-row" style="margin-bottom: 20px;">
+        <label>Nom i cognoms</label>
+        <input type="text" name="NomiCognoms_${i}" required>
+      </div>
+    `;
 
-        <div class="form-row">
-          <label>Nom i cognoms</label>
-          <input type="text" name="nomicognoms_${i}" required>
-        </div>
-
-        <div class="form-row">
+        if (!noAssistiran) {
+          html += `
+        <div class="form-row" style="margin-bottom: 20px;">
           <label>Apat del banquet</label>
           <select name="ApatBanquet_${i}" required>
             <option value="">Selecciona una opcio</option>
@@ -145,12 +156,19 @@
           </select>
         </div>
 
-        <div class="form-row">
+        <div class="form-row" style="margin-bottom: 20px;"> 
           <label>Alergies o intolerancies</label>
-          <textarea name="Alergies_${i}" rows="3"></textarea>
+          <textarea name="Alergies_${i}" rows="2"></textarea>
+        </div>
+
+        <div class="form-row" style="margin-bottom: 30px;">
+          <label>Cançó que no pot faltar</label>
+          <textarea name="Cancion_${i}" rows="1"></textarea>
         </div>
       `;
+        }
 
+        div.innerHTML = html;
         container.appendChild(div);
       }
     }
@@ -168,6 +186,19 @@
       const name = document.getElementById("nom").value;
       document.getElementById("subject").value = "Nova confirmacio d'assistencia E&L - " + name;
     });
+
+    function toggleAssistencia() {
+      if (radioNo.checked) {
+        campsAssistencia.style.display = "none";
+      } else {
+        campsAssistencia.style.display = "block";
+      }
+
+      crearCampos(parseInt(personesInput.value || 1));
+    }
+
+    radioSi.addEventListener("change", toggleAssistencia);
+    radioNo.addEventListener("change", toggleAssistencia);
   </script>
 </body>
 
