@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="ca">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Confirmar assistencia | E&L</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body class="pagina-confirmacio">
   <header>
     <nav class="nav">
@@ -13,7 +15,9 @@
         <li><a href="la-nostra-historia.html">La nostra historia</a></li>
         <li><a href="viatge-i-estada.html">Viatge i estada</a></li>
       </ul>
-      <a href="index.html" class="nav_title"><h3>E&L 25.09.26</h3></a>
+      <a href="index.html" class="nav_title">
+        <h3>E&L 25.09.26</h3>
+      </a>
       <a class="confirmar_assistencia" href="index.html">Tornar</a>
     </nav>
   </header>
@@ -22,7 +26,8 @@
     <section class="confirmacio">
       <div class="confirmacio-intro">
         <h1>Confirmacio d'assistencia</h1>
-        <p>Hi ha dies que es fan grans per les persones que els comparteixen. Ens encantara saber si caminareu amb nosaltres en aquest trosset de festa, taula i amor.</p>
+        <p>Hi ha dies que es fan grans per les persones que els comparteixen. Ens encantara saber si caminareu amb
+          nosaltres en aquest trosset de festa, taula i amor.</p>
       </div>
 
       <div class="confirmacio-layout">
@@ -81,10 +86,8 @@
 
           <div class="form-row">
             <label for="persones">Nombre de persones</label>
-            <input id="persones" name="NombrePersones" type="number" min="1" max="10" value="1" required>
+            <input id="persones" name="NombrePersones" type="number" min="1" max="8" value="1" required>
           </div>
-
-          <div id="acompanyants"></div>
 
           <div class="form-row">
             <label for="bus">Si hi hagues un bus que et portes i tornes desde Manresa, el faries servir?</label>
@@ -111,8 +114,11 @@
 
           <div class="form-row">
             <label for="alergies">Alergies o intolerancies</label>
-            <textarea id="alergies" name="AlergiesIntolerancies" rows="4" placeholder="Expliqueu-nos qualsevol detall important"></textarea>
+            <textarea id="alergies" name="AlergiesIntolerancies" rows="4"
+              placeholder="Expliqueu-nos qualsevol detall important"></textarea>
           </div>
+
+          <div id="acompanyants"></div>
 
           <div class="form-row">
             <label for="canco">Cançó que no pot faltar</label>
@@ -126,17 +132,17 @@
   </main>
 
   <script>
-  const personesInput = document.getElementById("persones");
-  const container = document.getElementById("acompanyants");
+    const personesInput = document.getElementById("persones");
+    const container = document.getElementById("acompanyants");
 
-  function crearCampos(num) {
-    container.innerHTML = "";
+    function crearCampos(num) {
+      container.innerHTML = "";
 
-    for (let i = 2; i <= num; i++) {
-      const div = document.createElement("div");
-      div.className = "acompanyant";
+      for (let i = 2; i <= num; i++) {
+        const div = document.createElement("div");
+        div.className = "acompanyant";
 
-      div.innerHTML = `
+        div.innerHTML = `
         <hr>
 
         <h4>Persona ${i}</h4>
@@ -163,18 +169,19 @@
         </div>
       `;
 
-      container.appendChild(div);
+        container.appendChild(div);
+      }
     }
-  }
 
-  personesInput.addEventListener("input", () => {
-    let num = parseInt(personesInput.value || 1);
+    personesInput.addEventListener("input", () => {
+      let num = parseInt(personesInput.value || 1);
 
-    if (num < 1) num = 1;
-    if (num > 8) num = 8;
+      if (num < 1) num = 1;
+      if (num > 8) num = 8;
 
-    crearCampos(num);
-  });
-</script>
+      crearCampos(num);
+    });
+  </script>
 </body>
+
 </html>
