@@ -35,12 +35,12 @@
           <img src="assets/banquet.jpg" alt="Eric i Laia">
         </figure>
 
-        <form class="confirmacio-form" action="https://formsubmit.co/ericilaia.10@gmail.com" method="POST">
-          <input type="hidden" name="_subject" value="Nova confirmacio d'assistencia E&L - {nomicognoms}">
+        <!-- <form class="confirmacio-form" action="https://formsubmit.co/ericilaia.10@gmail.com" method="POST"> -->
+        <form class="confirmacio-form" action="https://formsubmit.co/eveno229@gmail.com" method="POST">
+          <input type="hidden" name="_subject" id="subject">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_captcha" value="true">
           <input type="hidden" name="_next" value="https://www.ericilaia.es/gracies.html">
-          <input type="hidden" name="_replyto" value="{CorreuElectronic}">
           <input type="text" name="_honey" style="display:none">
           <input type="hidden" name="_autoresponse" value="
           <h2>Confirmació rebuda 🎉</h2>
@@ -50,7 +50,7 @@
           <h3>Resum de la teva resposta:</h3>
 
           <ul>
-            <li><b>Email:</b> {CorreuElectronic}</li>
+            <li><b>Email:</b> {email}</li>
             <li><b>Assistència:</b> {Assistencia}</li>
             <li><b>Persones:</b> {NombrePersones}</li>
             <li><b>Bus:</b> {Bus}</li>
@@ -69,7 +69,7 @@
 
           <div class="form-row">
             <label for="email">Correu electronic</label>
-            <input id="email" name="CorreuElectronic" type="email" required>
+            <input id="email" name="email" type="email" required>
           </div>
 
           <fieldset class="form-row">
@@ -180,6 +180,11 @@
       if (num > 8) num = 8;
 
       crearCampos(num);
+    });
+
+    document.querySelector("form").addEventListener("submit", function () {
+      const name = document.getElementById("nom").value;
+      document.getElementById("subject").value = "Nova confirmacio d'assistencia E&L - " + name;
     });
   </script>
 </body>
