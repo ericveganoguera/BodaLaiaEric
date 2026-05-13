@@ -1,19 +1,24 @@
 <!doctype html>
 <html lang="ca">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>E&L 25/09/26</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
+
   <header class="site-header">
     <nav class="nav">
       <ul class="nav-links">
         <li><a href="la-nostra-historia.html">La nostra historia</a></li>
         <li><a href="viatge-i-estada.html">Viatge i estada</a></li>
       </ul>
-      <a href="/" class="nav_title"><h3>E&L 25.09.26</h3></a>
+      <a href="/" class="nav_title">
+        <h3>E&L 25.09.26</h3>
+      </a>
       <a class="confirmar_assistencia" href="confirmar-assistencia.html">Confirmar assistencia</a>
     </nav>
 
@@ -60,21 +65,8 @@
     <p>&copy; 2026 Eric&Laia. Todos los derechos reservados.</p>
   </footer>
 
-  <script>
-    const root = document.documentElement;
-    const maxScroll = 180;
-    const maxOpacity = 0.75;
-    const maxBlur = 6;
+  <script src="js/main.js"></script>
 
-    function updateNavOpacity() {
-      const progress = Math.min(window.scrollY / maxScroll, 1);
-
-      root.style.setProperty("--nav-bg-opacity", (progress * maxOpacity).toFixed(2));
-      root.style.setProperty("--nav-blur", `${(progress * maxBlur).toFixed(1)}px`);
-    }
-
-    updateNavOpacity();
-    window.addEventListener("scroll", updateNavOpacity, { passive: true });
-  </script>
 </body>
+
 </html>
