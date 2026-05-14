@@ -1,178 +1,135 @@
 #!/usr/bin/env python3
 """
 fetch-photos.py
-Obté les URLs de les fotos d'un àlbum compartit de Google Fotos
-i genera el fitxer fotos.json que llegeix la galeria web.
+Usa Playwright (Chromium headless) per obtenir les fotos d'un àlbum
+compartit de Google Fotos i genera fotos.json per a la galeria web.
 
-Ús:
-    python scripts/fetch-photos.py           # normal
-    python scripts/fetch-photos.py --debug   # desa el HTML per inspecció
+Requeriments:
+    pip install playwright
+    playwright install chromium
+    playwright install-deps chromium
 """
 
 import re
 import json
 import sys
 import time
-import requests
 
-# ── CONFIGURACIÓ ──────────────────────────────────────────────────────────────
 ALBUM_URL  = "https://photos.app.goo.gl/wxN7cD93BrcsvdSH6"
 OUTPUT     = "fotos.json"
-DEBUG_HTML = "debug_album.html"   # només es crea amb --debug
-
 MIDA_GRAN  = "=w1920-h1440"
 MIDA_THUMB = "=w600-h450"
-# ─────────────────────────────────────────────────────────────────────────────
 
-DEBUG = "--debug" in sys.argv
-
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-        "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36"
-    ),
-    "Accept-Language": "ca,es;q=0.9,en;q=0.8",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Connection": "keep-alive",
-    "Upgrade-Insecure-Requests": "1",
-}
-
-# Tots els patrons coneguts de Google Fotos, del més específic al més general
-PATRONS = [
-    # Fotos personals d'usuari (format més comú en àlbums compartits)
-    r'"(https://lh3\.googleusercontent\.com/pw/[A-Za-z0-9_\-]+)',
-    # Sense cometes inicials
-    r'(https://lh3\.googleusercontent\.com/pw/[A-Za-z0-9_\-]+)',
-    # Format alternatiu sense /pw/
-    r'"(https://lh3\.googleusercontent\.com/[A-Za-z0-9_\-]{60,})',
-    # Format amb path addicional
-    r'(https://lh3\.googleusercontent\.com/[A-Za-z0-9/_\-]{60,})',
-]
+# Màxim de scrolls per carregar totes les fotos (cada scroll ~2s)
+MAX_SCROLLS = 30
 
 
-def fetch_html(url: str, retries: int = 3) -> tuple[str, str]:
-    """Retorna (html, url_final) seguint redireccions."""
-    session = requests.Session()
-    session.headers.update(HEADERS)
+def netejar_url(url: str) -> str | None:
+    """Treu els paràmetres de mida d'una URL de Google Fotos."""
+    # Treure tot a partir de = seguida de w, s, h o p (paràmetres de mida/crop)
+    base = re.sub(r'=[wshpc][^"&\s,\]]*', '', url).rstrip('=')
+    # Filtrar URLs massa curtes (icones, avatars...)
+    return base if len(base) > 60 else None
 
-    for intent in range(retries):
+
+def fetch_photos_playwright() -> list[dict]:
+    from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
+
+    fotos = []
+
+    with sync_playwright() as pw:
+        browser = pw.chromium.launch(headless=True)
+        context = browser.new_context(
+            user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/124.0.0.0 Safari/537.36"
+            ),
+            locale="ca-ES",
+            viewport={"width": 1280, "height": 900},
+        )
+        page = context.new_page()
+
+        print(f"  Obrint: {ALBUM_URL}")
+        page.goto(ALBUM_URL, wait_until="domcontentloaded", timeout=45_000)
+        print(f"  URL final: {page.url}")
+
+        # Esperar que apareguin les primeres fotos
         try:
-            resp = session.get(url, allow_redirects=True, timeout=30)
-            resp.raise_for_status()
-            return resp.text, resp.url
-        except requests.RequestException as e:
-            print(f"  Intent {intent + 1}/{retries} fallat: {e}")
-            if intent < retries - 1:
-                time.sleep(3)
+            page.wait_for_selector(
+                'img[src*="lh3.googleusercontent.com"]',
+                timeout=20_000,
+            )
+        except PWTimeout:
+            print("  AVÍS: No han aparegut imatges en 20s. Provant igualment...")
 
-    raise RuntimeError(f"No s'ha pogut descarregar: {url}")
+        # Scroll per carregar totes les fotos (lazy loading)
+        print("  Fent scroll per carregar totes les fotos...")
+        prev_count = 0
+        for i in range(MAX_SCROLLS):
+            page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+            page.wait_for_timeout(1_800)
 
+            count = page.evaluate("""
+                () => document.querySelectorAll('img[src*="lh3.googleusercontent.com"]').length
+            """)
+            print(f"    Scroll {i+1}: {count} imatges trobades")
 
-def extract_photo_urls(html: str) -> list[dict]:
-    """Prova cada patró fins trobar URLs de fotos."""
-    for i, patro in enumerate(PATRONS):
-        matches = re.findall(patro, html)
-        print(f"  Patró {i+1}: {len(matches)} coincidències")
+            if count > 0 and count == prev_count:
+                # Dos scrolls consecutius sense canvis → hem carregat tot
+                if i > 0:
+                    break
+            prev_count = count
 
-        if not matches:
-            continue
+        # Extreure totes les URLs
+        srcs = page.evaluate("""
+            () => Array.from(
+                document.querySelectorAll('img[src*="lh3.googleusercontent.com"]')
+            ).map(img => img.src)
+        """)
+
+        print(f"  URLs brutes trobades: {len(srcs)}")
 
         # Netejar i deduplicar
-        vists = set()
-        fotos = []
-        for url_base in matches:
-            # Treure paràmetres de mida existents
-            url_neta = re.sub(r'=[sw][^"&\s,\]]*', '', url_base).rstrip('=')
-            # Filtrar URLs massa curtes (probablement icones o avatars)
-            if len(url_neta) < 60:
-                continue
-            if url_neta in vists:
-                continue
-            vists.add(url_neta)
-            fotos.append({
-                "url":   url_neta + MIDA_GRAN,
-                "thumb": url_neta + MIDA_THUMB,
-            })
+        vistes = set()
+        for src in srcs:
+            base = netejar_url(src)
+            if base and base not in vistes:
+                vistes.add(base)
+                fotos.append({
+                    "url":   base + MIDA_GRAN,
+                    "thumb": base + MIDA_THUMB,
+                })
 
-        if fotos:
-            print(f"  → Usant patró {i+1}: {len(fotos)} fotos úniques trobades.")
-            return fotos
+        browser.close()
 
-    return []
+    return fotos
 
 
-def debug_info(html: str) -> None:
-    """Imprimeix informació de diagnòstic i desa el HTML."""
-    print("\n── DEBUG ────────────────────────────────────────────")
-    print(f"  Longitud HTML: {len(html):,} caràcters")
-
-    # Cercar qualsevol menció de lh3.googleusercontent.com
-    mencions = re.findall(r'lh3\.googleusercontent\.com[^\s"\'<]{0,80}', html)
-    print(f"  Mencions de lh3.googleusercontent.com: {len(mencions)}")
-    for m in mencions[:5]:
-        print(f"    {m[:100]}")
-
-    # Cercar AF_initDataCallback
-    callbacks = re.findall(r'AF_initDataCallback\(\{key:\s*[\'"]([^\'"]+)', html)
-    print(f"  AF_initDataCallback keys: {callbacks[:10]}")
-
-    # Guardar HTML per inspecció manual
-    with open(DEBUG_HTML, "w", encoding="utf-8") as f:
-        f.write(html)
-    print(f"  HTML desat a: {DEBUG_HTML}")
-    print("─────────────────────────────────────────────────────\n")
-
-
-def save_json(fotos: list[dict], path: str) -> None:
-    data = {
-        "album": ALBUM_URL,
-        "total": len(fotos),
-        "fotos": fotos,
-    }
-    with open(path, "w", encoding="utf-8") as f:
+def save_json(fotos: list[dict]) -> None:
+    data = {"album": ALBUM_URL, "total": len(fotos), "fotos": fotos}
+    with open(OUTPUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    print(f"  Desat a {path} ({len(fotos)} fotos)")
+    print(f"  Desat {OUTPUT} amb {len(fotos)} fotos.")
 
 
 def main() -> int:
     print(f"Obtenint fotos de: {ALBUM_URL}")
-
     try:
-        html, url_final = fetch_html(ALBUM_URL)
-        print(f"  URL final: {url_final}")
-        print(f"  HTML rebut: {len(html):,} caràcters")
-    except RuntimeError as e:
+        fotos = fetch_photos_playwright()
+    except Exception as e:
         print(f"ERROR: {e}", file=sys.stderr)
+        import traceback; traceback.print_exc()
+        save_json([])
         return 1
 
-    if DEBUG:
-        debug_info(html)
-
-    print("Extraient URLs de fotos...")
-    fotos = extract_photo_urls(html)
-
     if not fotos:
-        print("\nAVÍS: No s'han trobat fotos.", file=sys.stderr)
-        print("Executa amb --debug per inspeccionar el HTML:", file=sys.stderr)
-        print("  python scripts/fetch-photos.py --debug", file=sys.stderr)
-
-        # Imprimir fragment del HTML per diagnòstic ràpid
-        print("\n── Primer fragment del HTML (500 chars) ──")
-        print(html[:500])
-        print("\n── Fragment amb 'lh3' (si n'hi ha) ──")
-        idx = html.find('lh3')
-        if idx >= 0:
-            print(html[max(0, idx-50):idx+200])
-        else:
-            print("  'lh3' no trobat al HTML")
-
-        save_json([], OUTPUT)
+        print("AVÍS: No s'han trobat fotos.", file=sys.stderr)
+        save_json([])
         return 0
 
-    print(f"Trobades {len(fotos)} fotos.")
-    save_json(fotos, OUTPUT)
+    print(f"Total fotos úniques: {len(fotos)}")
+    save_json(fotos)
     return 0
 
 
