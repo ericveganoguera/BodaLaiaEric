@@ -151,7 +151,7 @@ def save_json(fotos: list[dict]) -> None:
 
 
 def main() -> int:
-    if "https://photos.google.com/u/1/share/AF1QipMulBwGDXxbVg5fkktqWZR8Jxb7vN4mgmU8hFFlSLTmRorDDzyouQIb_mum5tb17A?key=TnNQaGtvU3hZTTFIZWp5ZURPaEhMT09QMURzeTlR" in ALBUM_URL:
+    if "POSA_AQUI_LA_URL_REAL" in ALBUM_URL:
         print("ERROR: Actualitza la variable ALBUM_URL amb la URL real de l'àlbum.", file=sys.stderr)
         print("  Llegeix les instruccions al principi del fitxer.", file=sys.stderr)
         return 1
