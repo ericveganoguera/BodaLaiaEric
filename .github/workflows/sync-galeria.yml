@@ -1,26 +1,16 @@
-# .github/workflows/sync-galeria.yml
-#
-# Sincronitza les fotos de l'àlbum de Google Fotos
-# i actualitza fotos.json al repositori.
-#
-# S'executa:
-#   - Automàticament cada dia a les 03:00 UTC
-#   - Manualment des de la pestanya "Actions" de GitHub
-#   - Cada cop que es fa push a la branca principal
-
 name: Sync galeria fotos
 
 on:
   schedule:
-    - cron: "0 3 * * *"   # Cada dia a les 03:00 UTC (05:00 hora española)
-  workflow_dispatch:        # Execució manual des de GitHub Actions
+    - cron: "0 3 * * *"
+  workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - "scripts/fetch-photos.py"   # Re-executa si es modifica el script
+      - "scripts/fetch-photos.py"
 
 permissions:
-  contents: write           # Necessari per fer commit de fotos.json
+  contents: write
 
 jobs:
   sync-photos:
@@ -39,30 +29,26 @@ jobs:
       - name: Instal·lar dependències
         run: pip install requests
 
-      - name: Executar script de sincronització
-        run: python scripts/fetch-photos.py
+      - name: Executar script (mode debug)
+        run: python scripts/fetch-photos.py --debug
 
       - name: Mostrar resum
         run: |
-          if [ -f fotos.json ]; then
-            echo "✅ fotos.json generat correctament"
-            echo "   Total fotos: $(python3 -c "import json; d=json.load(open('fotos.json')); print(d['total'])")"
-          else
-            echo "❌ No s'ha generat fotos.json"
-            exit 1
-          fi
+          echo "── fotos.json ──────────────────────────────"
+          cat fotos.json
+          echo ""
+          echo "── debug_album.html (primers 2000 chars) ───"
+          head -c 2000 debug_album.html || echo "(fitxer no trobat)"
 
       - name: Commit i push de fotos.json
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add fotos.json
-          # Només fa commit si hi ha canvis reals
           if git diff --cached --quiet; then
-            echo "ℹ️  Sense canvis a fotos.json, no cal commit."
+            echo "Sense canvis a fotos.json."
           else
             TOTAL=$(python3 -c "import json; d=json.load(open('fotos.json')); print(d['total'])")
             git commit -m "sync: galeria actualitzada (${TOTAL} fotos) [skip ci]"
             git push
-            echo "✅ fotos.json actualitzat i pujat al repositori."
           fi
