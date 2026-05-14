@@ -1,0 +1,69 @@
+# .github/workflows/sync-galeria.yml
+#
+# Sincronitza les fotos de l'àlbum de Google Fotos
+# i actualitza fotos.json al repositori.
+#
+# S'executa:
+#   - Automàticament cada dia a les 03:00 UTC
+#   - Manualment des de la pestanya "Actions" de GitHub
+#   - Cada cop que es fa push a la branca principal
+
+name: Sync galeria fotos
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # Cada dia a les 03:00 UTC (05:00 hora española)
+  workflow_dispatch:        # Execució manual des de GitHub Actions
+  push:
+    branches: [main]
+    paths:
+      - "scripts/fetch-photos.py"   # Re-executa si es modifica el script
+
+permissions:
+  contents: write           # Necessari per fer commit de fotos.json
+
+jobs:
+  sync-photos:
+    name: Obtenir i desar fotos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositori
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Instal·lar dependències
+        run: pip install requests
+
+      - name: Executar script de sincronització
+        run: python scripts/fetch-photos.py
+
+      - name: Mostrar resum
+        run: |
+          if [ -f fotos.json ]; then
+            echo "✅ fotos.json generat correctament"
+            echo "   Total fotos: $(python3 -c "import json; d=json.load(open('fotos.json')); print(d['total'])")"
+          else
+            echo "❌ No s'ha generat fotos.json"
+            exit 1
+          fi
+
+      - name: Commit i push de fotos.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add fotos.json
+          # Només fa commit si hi ha canvis reals
+          if git diff --cached --quiet; then
+            echo "ℹ️  Sense canvis a fotos.json, no cal commit."
+          else
+            TOTAL=$(python3 -c "import json; d=json.load(open('fotos.json')); print(d['total'])")
+            git commit -m "sync: galeria actualitzada (${TOTAL} fotos) [skip ci]"
+            git push
+            echo "✅ fotos.json actualitzat i pujat al repositori."
+          fi
