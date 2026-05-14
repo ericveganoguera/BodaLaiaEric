@@ -13,22 +13,24 @@ Requeriments:
 import re
 import json
 import sys
-import time
 
-ALBUM_URL  = "https://photos.app.goo.gl/wxN7cD93BrcsvdSH6"
+# ─────────────────────────────────────────────────────────────────────────────
+# ⚠️  CANVIA AQUESTA URL per la URL real de l'àlbum (photos.google.com/share/...)
+#    Com obtenir-la:
+#      1. Obre https://photos.app.goo.gl/wxN7cD93BrcsvdSH6 al teu navegador
+#      2. Quan carregui l'àlbum, copia la URL de la barra d'adreces
+#      3. Enganxa-la aquí (ha de començar per https://photos.google.com/share/)
+# ─────────────────────────────────────────────────────────────────────────────
+ALBUM_URL = "https://photos.google.com/u/1/share/AF1QipMulBwGDXxbVg5fkktqWZR8Jxb7vN4mgmU8hFFlSLTmRorDDzyouQIb_mum5tb17A?key=TnNQaGtvU3hZTTFIZWp5ZURPaEhMT09QMURzeTlR"
+
 OUTPUT     = "fotos.json"
 MIDA_GRAN  = "=w1920-h1440"
 MIDA_THUMB = "=w600-h450"
-
-# Màxim de scrolls per carregar totes les fotos (cada scroll ~2s)
-MAX_SCROLLS = 30
+MAX_SCROLLS = 40
 
 
 def netejar_url(url: str) -> str | None:
-    """Treu els paràmetres de mida d'una URL de Google Fotos."""
-    # Treure tot a partir de = seguida de w, s, h o p (paràmetres de mida/crop)
     base = re.sub(r'=[wshpc][^"&\s,\]]*', '', url).rstrip('=')
-    # Filtrar URLs massa curtes (icones, avatars...)
     return base if len(base) > 60 else None
 
 
@@ -54,38 +56,70 @@ def fetch_photos_playwright() -> list[dict]:
         page.goto(ALBUM_URL, wait_until="domcontentloaded", timeout=45_000)
         print(f"  URL final: {page.url}")
 
-        # Esperar que apareguin les primeres fotos
+        # Esperar que apareguin les miniatures de les fotos de l'àlbum.
+        # Google Fotos usa l'atribut aria-label a les fotos de l'àlbum.
         try:
             page.wait_for_selector(
-                'img[src*="lh3.googleusercontent.com"]',
+                'div[data-latest-bg*="lh3.googleusercontent"], '
+                'img[src*="lh3.googleusercontent.com/pw"], '
+                '[style*="lh3.googleusercontent"]',
                 timeout=20_000,
             )
+            print("  Contingut de l'àlbum detectat.")
         except PWTimeout:
-            print("  AVÍS: No han aparegut imatges en 20s. Provant igualment...")
+            print("  AVÍS: Selector principal no trobat, continuant igualment...")
 
-        # Scroll per carregar totes les fotos (lazy loading)
+        # Scroll per activar el lazy loading de totes les fotos
         print("  Fent scroll per carregar totes les fotos...")
         prev_count = 0
+        scrolls_sense_canvi = 0
+
         for i in range(MAX_SCROLLS):
             page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
-            page.wait_for_timeout(1_800)
+            page.wait_for_timeout(2_000)
 
+            # Comptar elements que contenen URLs de fotos (incl. backgrounds CSS)
             count = page.evaluate("""
-                () => document.querySelectorAll('img[src*="lh3.googleusercontent.com"]').length
+                () => {
+                    const imgs = document.querySelectorAll('img[src*="lh3.googleusercontent.com"]');
+                    const divs = document.querySelectorAll('[data-latest-bg*="lh3.googleusercontent"]');
+                    return imgs.length + divs.length;
+                }
             """)
-            print(f"    Scroll {i+1}: {count} imatges trobades")
+            print(f"    Scroll {i+1}: {count} elements trobats")
 
-            if count > 0 and count == prev_count:
-                # Dos scrolls consecutius sense canvis → hem carregat tot
-                if i > 0:
+            if count == prev_count:
+                scrolls_sense_canvi += 1
+                if scrolls_sense_canvi >= 2:
+                    print("  Dues pàgines sense canvis — àlbum complet carregat.")
                     break
+            else:
+                scrolls_sense_canvi = 0
+
             prev_count = count
 
-        # Extreure totes les URLs
+        # Extreure URLs: tant de <img src="..."> com de style="background-url(...)"
         srcs = page.evaluate("""
-            () => Array.from(
+            () => {
+                const urls = new Set();
+
+                // Imatges directes
                 document.querySelectorAll('img[src*="lh3.googleusercontent.com"]')
-            ).map(img => img.src)
+                    .forEach(img => urls.add(img.src));
+
+                // Backgrounds amb data-latest-bg
+                document.querySelectorAll('[data-latest-bg*="lh3.googleusercontent"]')
+                    .forEach(el => urls.add(el.dataset.latestBg));
+
+                // Backgrounds en atribut style
+                document.querySelectorAll('[style*="lh3.googleusercontent"]')
+                    .forEach(el => {
+                        const m = el.getAttribute('style').match(/url\\(["']?(https:\\/\\/lh3\\.googleusercontent\\.com[^"')]+)/);
+                        if (m) urls.add(m[1]);
+                    });
+
+                return [...urls];
+            }
         """)
 
         print(f"  URLs brutes trobades: {len(srcs)}")
@@ -95,6 +129,9 @@ def fetch_photos_playwright() -> list[dict]:
         for src in srcs:
             base = netejar_url(src)
             if base and base not in vistes:
+                # Filtrar avatar/foto de perfil (path /a/ en comptes de /pw/)
+                if "/a/ACg8" in base or "/a/ACg" in base:
+                    continue
                 vistes.add(base)
                 fotos.append({
                     "url":   base + MIDA_GRAN,
@@ -114,6 +151,11 @@ def save_json(fotos: list[dict]) -> None:
 
 
 def main() -> int:
+    if "https://photos.google.com/u/1/share/AF1QipMulBwGDXxbVg5fkktqWZR8Jxb7vN4mgmU8hFFlSLTmRorDDzyouQIb_mum5tb17A?key=TnNQaGtvU3hZTTFIZWp5ZURPaEhMT09QMURzeTlR" in ALBUM_URL:
+        print("ERROR: Actualitza la variable ALBUM_URL amb la URL real de l'àlbum.", file=sys.stderr)
+        print("  Llegeix les instruccions al principi del fitxer.", file=sys.stderr)
+        return 1
+
     print(f"Obtenint fotos de: {ALBUM_URL}")
     try:
         fotos = fetch_photos_playwright()
