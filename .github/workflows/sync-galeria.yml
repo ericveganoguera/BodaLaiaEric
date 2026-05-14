@@ -2,7 +2,7 @@ name: Sync galeria fotos
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    - cron: "0 3 * * *"   # Cada dia a les 05:00 hora espanyola
   workflow_dispatch:
   push:
     branches: [main]
@@ -26,19 +26,19 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Instal·lar dependències
-        run: pip install requests
+      - name: Instal·lar Playwright i dependències
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps chromium
 
-      - name: Executar script (mode debug)
-        run: python scripts/fetch-photos.py --debug
+      - name: Executar script
+        run: python scripts/fetch-photos.py
 
-      - name: Mostrar resum
+      - name: Mostrar resultat
         run: |
           echo "── fotos.json ──────────────────────────────"
           cat fotos.json
-          echo ""
-          echo "── debug_album.html (primers 2000 chars) ───"
-          head -c 2000 debug_album.html || echo "(fitxer no trobat)"
 
       - name: Commit i push de fotos.json
         run: |
