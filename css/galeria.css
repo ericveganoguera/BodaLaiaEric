@@ -60,6 +60,12 @@
   transition: background 0.2s, color 0.2s, transform 0.2s;
 }
 
+.galeria-link-album.disabled{
+  /* pointer-events: none; */
+  opacity: .5;
+  cursor: not-allowed;
+}
+
 .galeria-link-album:hover {
   background: var(--accent);
   color: #fff;
