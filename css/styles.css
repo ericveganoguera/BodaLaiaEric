@@ -11,7 +11,12 @@
 }
 
 *{box-sizing:border-box}
-body{margin:0;color:#111;line-height:1.45}
+body{
+  margin:0;
+  color:#111;
+  line-height:1.45;
+  background-color: #f7f4ef;
+}
 
 .site-header{position:relative}
 
@@ -89,7 +94,9 @@ body{margin:0;color:#111;line-height:1.45}
 
 /* CONTENT */
 main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
-
+.important-indicacions{
+  font-weight: bold;
+}
 #arribada,
 #ceremonia{
   padding:64px 0;
@@ -128,7 +135,7 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:32px;
+  gap:20px;
   min-height:100%;
   text-align:center;
 }
@@ -164,7 +171,7 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   justify-content:center;
   min-width:140px;
   min-height:46px;
-  padding:12px 28px;
+  padding:12px 70px;
   border:1px solid var(--accent);
   border-radius:8px;
   background:var(--accent);
@@ -180,6 +187,9 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   transform:translateY(-2px);
 }
 
+.ubicacion-1{
+  font-size:11000px;
+}
 /* CONFIRMACIO */
 .pagina-confirmacio{
   --nav-bg-opacity:0.92;
@@ -382,7 +392,7 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
 }
 
 .historia-hero{
-  background-image:linear-gradient(rgba(15,23,42,0.18),rgba(15,23,42,0.62)), url("../assets/fonsprincipal.jpeg");
+  background-image:linear-gradient(rgba(15,23,42,0.18),rgba(15,23,42,0.62)), url("../assets/parella-10.jpg");
 }
 
 .estada-hero{
