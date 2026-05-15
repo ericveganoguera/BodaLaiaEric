@@ -1,0 +1,54 @@
+name: Sync galeria fotos
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # Cada dia a les 05:00 hora espanyola
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/fetch-photos.py"
+
+permissions:
+  contents: write
+
+jobs:
+  sync-photos:
+    name: Obtenir i desar fotos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositori
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instal·lar Playwright i dependències
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Executar script
+        run: python scripts/fetch-photos.py
+
+      - name: Mostrar resultat
+        run: |
+          echo "── fotos.json ──────────────────────────────"
+          cat fotos.json
+
+      - name: Commit i push de fotos.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add fotos.json
+          if git diff --cached --quiet; then
+            echo "Sense canvis a fotos.json."
+          else
+            TOTAL=$(python3 -c "import json; d=json.load(open('fotos.json')); print(d['total'])")
+            git commit -m "sync: galeria actualitzada (${TOTAL} fotos) [skip ci]"
+            git push
+          fi
