@@ -14,13 +14,6 @@ import re
 import json
 import sys
 
-# ─────────────────────────────────────────────────────────────────────────────
-# ⚠️  CANVIA AQUESTA URL per la URL real de l'àlbum (photos.google.com/share/...)
-#    Com obtenir-la:
-#      1. Obre https://photos.app.goo.gl/wxN7cD93BrcsvdSH6 al teu navegador
-#      2. Quan carregui l'àlbum, copia la URL de la barra d'adreces
-#      3. Enganxa-la aquí (ha de començar per https://photos.google.com/share/)
-# ─────────────────────────────────────────────────────────────────────────────
 ALBUM_URL = "https://photos.google.com/u/1/share/AF1QipMulBwGDXxbVg5fkktqWZR8Jxb7vN4mgmU8hFFlSLTmRorDDzyouQIb_mum5tb17A?key=TnNQaGtvU3hZTTFIZWp5ZURPaEhMT09QMURzeTlR"
 
 OUTPUT     = "fotos.json"
