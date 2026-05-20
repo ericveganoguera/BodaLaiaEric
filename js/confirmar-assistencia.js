@@ -40,12 +40,12 @@ function crearCampos(num) {
 
             <div class="form-row"> 
             <label>Al·lèrgies o intoleràncies</label>
-            <textarea name="Alergies_${i}" rows="2"></textarea>
+            <textarea name="Alergies_${i}" rows="2" placeholder="Expliqueu-nos qualsevol detall important"></textarea>
             </div>
 
             <div class="form-row" style="margin-bottom: 30px;">
             <label>Cançó que no pot faltar</label>
-            <textarea name="Cancion_${i}" rows="1"></textarea>
+            <textarea name="Cancion_${i}" rows="1" placeholder="La teva cançó preferida"></textarea>
             </div>
         `;
         }
