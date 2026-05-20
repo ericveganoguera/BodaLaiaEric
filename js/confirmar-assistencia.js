@@ -27,18 +27,19 @@ function crearCampos(num) {
         if (!noAssistiran) {
             html += `
             <div class="form-row">
-            <label>Apat del banquet</label>
+            <label>Àpat del banquet</label>
             <select name="ApatBanquet_${i}" required>
-                <option value="">Selecciona una opcio</option>
-                <option value="Menu general">Menu general</option>
-                <option value="Menu vegetaria">Menu vegetaria</option>
-                <option value="Menu infantil">Menu infantil</option>
+                <option value="">Selecciona una opció</option>
+                <option value="Menu general">Menú general</option>
+                <option value="Menu vegetaria">Menú vegetarià</option>
+                <option value="Menu vega">Menú vegà</option>
+                <option value="Menu infantil">Menú infantil</option>
                 <option value="Altres necessitats">Altres necessitats</option>
             </select>
             </div>
 
             <div class="form-row"> 
-            <label>Alergies o intolerancies</label>
+            <label>Al·lèrgies o intoleràncies</label>
             <textarea name="Alergies_${i}" rows="2"></textarea>
             </div>
 
