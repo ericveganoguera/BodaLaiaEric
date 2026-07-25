@@ -68,10 +68,30 @@
             </label>
           </fieldset>
 
-          <div class="form-row">
+          <!--<div class="form-row">
             <label for="persones">Nombre de persones (Modifica número de persones)</label>
             <input id="persones" name="NombrePersones" type="number" min="1" max="8" value="1" required>
+          </div>-->
+
+          <div class="form-row">
+            <label for="persones">Nombre de persones (Modifica el número de persones)</label>
+            <select id="persones" name="NombrePersones" required>
+              <option disabled selected value="">Selecciona nombre de persones</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
           </div>
+
           <div class="camps-assistencia">
             <!-- <div class="form-row">
               <label for="bus">Si hi hagués un bus que et portes i tornes des de Manresa, el faries servir?</label>
