@@ -45,7 +45,7 @@ function crearCampos(num) {
 
             <div class="form-row">
               <label for="telefonalergies">En cas de tenir al·lèrgies, intoleràncies i/o altres necessitats, deixans un teléfon de contacte</label>
-              <input id="telefonalergies" name="TelefonAlergies" type="text" placeholder="Telèfon">
+              <input id="telefonalergies" name="TelefonAlergies_${i}" type="text" placeholder="Telèfon">
             </div>
 
             <div class="form-row" style="margin-bottom: 30px;">
