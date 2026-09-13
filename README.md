@@ -40,4 +40,4 @@ El lloc es desplega automàticament amb GitHub Pages cada cop que es fa push a l
 
 - **Data:** 25 de setembre de 2026
 - **Lloc:** Masia Can Macia — Odena
-- **Horari:** Arribada 16:30 · Cerimònia 17:00
+- **Horari:** Arribada 16:00 · Cerimònia 16:30
