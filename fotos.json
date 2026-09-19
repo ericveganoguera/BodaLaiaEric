@@ -1,10 +1,14 @@
 {
   "album": "https://photos.google.com/u/1/share/AF1QipMulBwGDXxbVg5fkktqWZR8Jxb7vN4mgmU8hFFlSLTmRorDDzyouQIb_mum5tb17A?key=TnNQaGtvU3hZTTFIZWp5ZURPaEhMT09QMURzeTlR",
-  "total": 1,
+  "total": 2,
   "fotos": [
     {
       "url": "https://lh3.googleusercontent.com/pw/AP1GczNaw4nsUPsh6w6eFXfD3yeKXG59aHaeJ2R-OGDcyuJFiPN--zqhBMdg7aEed9QSyAeNClQ7TdRFJVDfq-I3JvJmB5HT3WJGWpG4B1xoerhaLxxjqlY=w1920-h1440",
       "thumb": "https://lh3.googleusercontent.com/pw/AP1GczNaw4nsUPsh6w6eFXfD3yeKXG59aHaeJ2R-OGDcyuJFiPN--zqhBMdg7aEed9QSyAeNClQ7TdRFJVDfq-I3JvJmB5HT3WJGWpG4B1xoerhaLxxjqlY=w600-h450"
+    },
+    {
+      "url": "https://lh3.googleusercontent.com/pw/AP1GczOTr0V198Z5eMyMymeNLCulH7wdIjiaWZgIfRPL-B-0Fn_RuXkq_ANdPnqqGa41fQYOn637PYFFGazR_DFjobVMKRiN6K6MxFlgDhLl6CQPx8fIlrKl=w1920-h1440",
+      "thumb": "https://lh3.googleusercontent.com/pw/AP1GczOTr0V198Z5eMyMymeNLCulH7wdIjiaWZgIfRPL-B-0Fn_RuXkq_ANdPnqqGa41fQYOn637PYFFGazR_DFjobVMKRiN6K6MxFlgDhLl6CQPx8fIlrKl=w600-h450"
     }
   ]
 }
