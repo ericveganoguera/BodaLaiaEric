@@ -69,7 +69,8 @@ personesInput.addEventListener("input", () => {
     crearCampos(num);
 });
 
-document.querySelector("form").addEventListener("submit", function () {
+document.querySelector("form").addEventListener("submit", function (e) {
+    if (this.hasAttribute("data-tancat")) { e.preventDefault(); return; }
     const name = document.getElementById("nom").value;
     document.getElementById("subject").value = "Nova confirmacio d'assistencia E&L - " + name;
 });
@@ -94,3 +95,8 @@ function toggleAssistencia() {
 
 radioSi.addEventListener("change", toggleAssistencia);
 radioNo.addEventListener("change", toggleAssistencia);
+// Confirmacions tancades: bloquejar tots els camps del formulari
+if (document.querySelector("form[data-tancat]")) {
+    document.querySelectorAll(".confirmacio-form input, .confirmacio-form select, .confirmacio-form textarea, .confirmacio-form button")
+        .forEach(el => { el.disabled = true; });
+}
