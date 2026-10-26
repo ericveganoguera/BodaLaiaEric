@@ -731,6 +731,16 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   margin:0;
 }
 
+.site-credit{
+  margin-top:4px !important;
+  font-size:0.78rem;
+}
+.site-credit a{
+  color:#fff;
+  text-decoration:underline;
+  text-underline-offset:2px;
+}
+
 /* RESPONSIVE tweaks */@media (max-width:860px){
   .nav{
     grid-template-columns:1fr;
