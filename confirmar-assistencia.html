@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex">
   <title>Confirmar assistència | E&L</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -28,8 +29,7 @@
     <section class="confirmacio">
       <div class="confirmacio-intro">
         <h1>Confirmació d'assistència</h1>
-        <p>Hi ha dies que es fan grans per les persones que els comparteixen. Ens encantarà saber si caminareu amb 
-          nosaltres en aquest trosset de festa, taula i amor.</p>
+        <p class="confirmacio-tancada">La boda ja s'ha celebrat i les confirmacions d'assistència estan tancades. Moltes gràcies a tots els que vau compartir aquest dia amb nosaltres!</p>
       </div>
 
       <div class="confirmacio-layout">
@@ -37,8 +37,7 @@
           <img src="assets/banquet.jpg" alt="Eric i Laia">
         </figure>
 
-        <!-- <form class="confirmacio-form" action="https://formsubmit.co/ericilaia.10@gmail.com" method="POST"> -->
-        <form class="confirmacio-form" action="https://formsubmit.co/ericilaia.10@gmail.com" method="POST">
+        <form class="confirmacio-form" data-tancat aria-disabled="true">
           <input type="hidden" name="_subject" id="subject">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_captcha" value="true">
@@ -135,7 +134,7 @@
 
           </div>
           <div id="acompanyants"></div>
-          <button class="form-submit" type="submit">Enviar confirmació</button>
+          <button class="form-submit" type="submit" disabled>Confirmacions tancades</button>
         </form>
       </div>
     </section>

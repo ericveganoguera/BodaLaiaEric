@@ -1,11 +1,11 @@
 name: Sync galeria fotos
 
 on:
-  #schedule:
-    #- cron: "*/5 * * * *"   # Cada dia a les 05:00 hora espanyola
+  schedule:
+    - cron: "0 4 * * *"   # Cada dia a les 04:00 UTC (05:00 a l'hivern, 06:00 a l'estiu a Espanya)
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - "scripts/fetch-photos.py"
 

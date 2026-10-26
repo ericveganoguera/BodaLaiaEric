@@ -334,6 +334,24 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   transition:background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
+.form-submit:disabled,
+.form-submit:disabled:hover{
+  opacity:0.55;
+  cursor:not-allowed;
+  background:var(--accent);
+  color:#fff;
+  transform:none;
+}
+
+.confirmacio-tancada{
+  font-weight:700;
+}
+
+.confirmacio-form[data-tancat]{
+  opacity:0.6;
+  pointer-events:none;
+}
+
 .form-submit:hover{
   background:#fff;
   color:var(--accent);
