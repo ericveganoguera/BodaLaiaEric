@@ -413,6 +413,24 @@ main{max-width:var(--max-width);margin:48px auto;padding:0 20px}
   background-image:linear-gradient(rgba(15,23,42,0.18),rgba(15,23,42,0.62)), url("../assets/parella-10.jpg");
 }
 
+.galeria-hero{
+  background-image:linear-gradient(rgba(15,23,42,0.22),rgba(15,23,42,0.65)), url("../assets/parella-13.jpg");
+  background-position:center 10%;
+}
+
+.galeria-avis{
+  max-width:760px;
+}
+
+.galeria-avis > p{
+  font-size:1.1rem;
+  line-height:1.7;
+}
+
+.galeria-signatura{
+  font-weight:700;
+}
+
 .estada-hero{
   background-image:linear-gradient(rgba(15,23,42,0.2),rgba(15,23,42,0.68)), url("../assets/banquet.jpg");
 }
